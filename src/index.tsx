@@ -1,12 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
 
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+} from "@apollo/client";
+import { injectMock } from "apollo-mock-http";
+
+import "./index.css";
+
+import { mockData } from "./mocks";
+const links = [
+  new HttpLink({
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+  }),
+];
+
+injectMock({
+  links,
+  enableMock: process.env.NODE_ENV === "development",
+  targetOperations: ["getCountries"],
+  mockData,
+});
 
 const client = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+  link: ApolloLink.from(links),
   cache: new InMemoryCache(),
 });
 

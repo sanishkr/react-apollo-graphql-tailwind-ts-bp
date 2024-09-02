@@ -1,5 +1,4 @@
 import { gql, useQuery } from "@apollo/client";
-import "./App.css";
 import { Country } from "./gql/graphql";
 
 const GET_COUNTRIES_LIST = gql(`
